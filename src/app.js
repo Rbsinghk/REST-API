@@ -1,4 +1,6 @@
 const express = require("express");
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 const { default: mongoose } = require("mongoose");
 const app = express();
 require("./db/conn");
@@ -10,7 +12,7 @@ app.use(express.json());
 app.post("/register", async (req,res)=>{
     try {
         const new_register = new register(req.body);
-        
+        const token = await new_register.generateAuthToken()
         const reg = await new_register.save();
 
         res.status(201).send(reg);
